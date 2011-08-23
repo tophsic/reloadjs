@@ -3,7 +3,8 @@
  */
 
 module('Reload');
-asyncTest('Without head async', 4, function() {
+
+asyncTest('Without head once', 4, function() {
    ok(reload !== undefined, "reload");
    equal(typeof window.testVar, 'undefined', 'script not yet loaded');
    reload('resources/scripttoreload.js', function() {
@@ -12,3 +13,13 @@ asyncTest('Without head async', 4, function() {
       start();
    });
 });
+
+asyncTest('Without head twice', 1, function() {
+   reload('resources/scripttoreload.js', function() {
+      reload('resources/scripttoreload.js', function() {
+         equal(window.document.body.getElementsByTagName('script').length, 1, 'script loaded');
+         start();
+      });
+   });
+});
+
